@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pain Point Search Engine - UX Mockups</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(41deg, #6ab8f5 35%, #73e2ed 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .navigation {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 15px 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: #6366f1;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .nav-btn:hover {
+            background: #4f46e5;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+        }
+
+        .nav-btn.active {
+            background: #6366f1;;
+            transform: translateY(-1px);
+        }
+
+        .mockup-screen {
+            display: none;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            min-height: 700px;
+            position: relative;
+        }
+
+        .mockup-screen.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-section {
+            padding: 50px 30px;
+            text-align: center;
+        }
+
+        .search-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 20px 25px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .search-btn {
+            background: #6366f1;
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background: #4f46e5;
+            transform: translateY(-2px);
+        }
+
+        .example-queries {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .example-query {
+            background: #f3f4f6;
+            color: #6b7280;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .example-query:hover {
+            background: #6366f1;
+            color: white;
+        }
+
+        .results-section {
+            padding: 30px;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .results-count {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 15px;
+        }
+
+        .filter-btn {
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: #6366f1;
+            color: white;
+            border-color: #6366f1;
+        }
+
+        .pain-point-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .pain-point-card:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .pain-intensity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .intensity-bar {
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            width: 100px;
+            overflow: hidden;
+        }
+
+        .intensity-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981 0%, #f59e0b 50%, #ef4444 100%);
+            transition: width 0.3s ease;
+        }
+
+        .card-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #1f2937;
+        }
+
+        .card-excerpt {
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .card-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .tag {
+            background: #ede9fe;
+            color: #7c3aed;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #9ca3af;
+            font-size: 14px;
+        }
+
+        .insights-panel {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .insights-title {
+            font-size: 1.5em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #1f2937;
+        }
+
+        .insight-section {
+            margin-bottom: 25px;
+        }
+
+        .insight-section h3 {
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #374151;
+        }
+
+        .insight-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .insight-list li {
+            padding: 8px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .insight-list li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #6366f1;
+            font-weight: bold;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .feedback-buttons{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+            padding-left: 480px;
+            width: 680px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #6366f1;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .loading-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            text-align: center;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid #e5e7eb;
+            border-top: 4px solid #6366f1;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .progress-bar {
+            width: 300px;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            width: 0%;
+            transition: width 0.3s ease;
+            animation: progressAnimation 3s ease-in-out infinite;
+        }
+
+        @keyframes progressAnimation {
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 100%; }
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 30px;
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .dashboard-card h3 {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #1f2937;
+        }
+
+        .trend-chart {
+            height: 200px;
+            background: linear-gradient(135deg, #667eea22, #764ba222);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280;
+            font-style: italic;
+        }
+
+        .mobile-responsive {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-box {
+                flex-direction: column;
+            }
+            
+            .results-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .filter-controls {
+                flex-wrap: wrap;
+            }
+            
+            .mobile-responsive {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="navigation">
+            <div class="nav-buttons">
+                <button class="nav-btn active" onclick="showScreen('landing')">Landing Page</button>
+                <button class="nav-btn" onclick="showScreen('search')">Search Interface</button>
+                <button class="nav-btn" onclick="showScreen('loading')">Processing</button>
+                <button class="nav-btn" onclick="showScreen('results')">Results</button>
+                <button class="nav-btn" onclick="showScreen('insights')">AI Insights</button>
+            </div>
+        </div>
+
+        <!-- Landing Page -->
+        <div id="landing" class="mockup-screen active">
+            <div class="header">
+                <h1>Pain Point Discovery Engine</h1>
+                <p>Find validated user frustrations and product opportunities from real conversations</p>
+            </div>
+            <div class="search-section">
+                <div class="search-container">
+                    <div class="search-box">
+                        <input type="text" class="search-input" placeholder="Describe what pain points/topics you're looking for (e.g., 'mobile app authentication frustrations')">
+                        <button class="search-btn">Search</button>
+                    </div>
+                </div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                   <div class="stat-number" id="search-count">0</div>
+                       <script>
+                            let searchCount = 0;
+                            let totalSearchTime = 0;
+                            let searchStartTime = null;
+
+                            function updateSearchCounterDisplay() {
+                              const counterEl = document.getElementById('search-count');
+                              if (counterEl) {
+                                counterEl.textContent = searchCount.toLocaleString();
+                              }
+                            }
+
+                            function updateAverageTimeDisplay() {
+                              const avgTimeEl = document.getElementById('average-time');
+                              if (avgTimeEl && searchCount > 0) {
+                                const avg = totalSearchTime / searchCount;
+                                avgTimeEl.textContent = `${avg.toFixed(1)}s`;
+                              }
+                            }
+
+                            function startSearchTimer() {
+                              searchStartTime = Date.now();
+                            }
+
+                            function endSearchTimer() {
+                              if (searchStartTime) {
+                                const durationSeconds = (Date.now() - searchStartTime) / 1000;
+                                totalSearchTime += durationSeconds;
+                                searchCount++;
+                                localStorage.setItem('searchCount', searchCount);
+                                localStorage.setItem('totalSearchTime', totalSearchTime);
+
+                                updateSearchCounterDisplay();
+                                updateAverageTimeDisplay();
+                                searchStartTime = null;
+                              }
+                            }
+
+                            function showScreen(screenId) {
+                              document.querySelectorAll('.mockup-screen').forEach(screen => {
+                                screen.classList.remove('active');
+                              });
+                              const screenToShow = document.getElementById(screenId);
+                              if (screenToShow) {
+                                screenToShow.classList.add('active');
+                              }
+                            }
+
+                            document.addEventListener('DOMContentLoaded', () => {
+                              // Load from localStorage
+                              searchCount = parseInt(localStorage.getItem('searchCount')) || 0;
+                              totalSearchTime = parseFloat(localStorage.getItem('totalSearchTime')) || 0;
+
+                              updateSearchCounterDisplay();
+                              updateAverageTimeDisplay();
+
+                              document.querySelector('.search-btn').addEventListener('click', () => {
+                                startSearchTimer();
+                                showScreen('loading');
+                              
+                              });
+                            });
+                
+                        </script>
+                    <div class="stat-label">Total Searches</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">< 10s</div>
+                    <div class="stat-label">Average Response Time</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Cross-Domain Categories</div>
+                </div>
+            </div>
+            <div class="feedback-buttons">
+                <button class="nav-btn" onclick="showScreen('dashboard')">Feedback</button>
+                </div>
+        </div>
+
+        <!-- Search Interface -->
+        <div id="search" class="mockup-screen">
+            <div class="header">
+                <h1>Search Pain Points</h1>
+                <p>Enter your query to discover validated user frustrations across all domains</p>
+            </div>
+            <div class="search-section">
+                <div class="search-container">
+                    <div class="search-box">
+                        <input type="text" class="search-input" value="mobile app authentication pain points" placeholder="Describe what pain points you're looking for">
+                        <button class="search-btn">Search</button>
+                    </div>
+                    <div class="example-queries">
+                        <div class="example-query">API integration headaches</div>
+                        <div class="example-query">Cloud cost management issues</div>
+                        <div class="example-query">User onboarding dropoff</div>
+                        <div class="example-query">Documentation problems</div>
+                        <div class="example-query">CI/CD pipeline failures</div>
+                    </div>
+                </div>
+                <div class="insights-panel">
+                    <div class="insights-title">💡 Search Tips</div>
+                    <div class="insight-section">
+                        <h3>Best Practices</h3>
+                        <ul class="insight-list">
+                            <li>Use descriptive terms about user problems, not solutions</li>
+                            <li>Include domain context (e.g., "developer tools", "e-commerce")</li>
+                            <li>Our AI finds cross-domain patterns automatically</li>
+                            <li>Results are pre-filtered for genuine frustrations</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Screen -->
+        <div id="loading" class="mockup-screen">
+            <div class="header">
+                <h1>Analyzing Pain Points</h1>
+                <p>Processing conversations and extracting validated frustrations</p>
+            </div>
+            <div class="loading-screen">
+                <div class="loading-spinner"></div>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <h3>Processing "mobile app authentication pain points"</h3>
+                <p style="color: #6b7280; margin-top: 10px;">Searching through 50,000+ validated pain point discussions...</p>
+                <div style="margin-top: 20px; color: #6b7280; font-size: 14px;">
+                    <div>✓ Semantic search across domains</div>
+                    <div>✓ Cross-topic pattern matching</div>
+                    <div>⏳ LLM analysis and insight generation</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Page -->
+        <div id="results" class="mockup-screen">
+            <div class="header">
+                <h1>Pain Point Results</h1>
+                <p>Validated user frustrations for: "mobile app authentication pain points"</p>
+            </div>
+            <div class="results-section">
+                <div class="results-header">
+                    <div class="results-count">Found 47 validated pain points across 12 domains</div>
+                    <div class="filter-controls">
+                        <button class="filter-btn active">All Domains</button>
+                        <button class="filter-btn">High Intensity</button>
+                        <button class="filter-btn">Recent</button>
+                        <button class="filter-btn">Cross-Domain</button>
+                    </div>
+                </div>
+
+                <div class="pain-point-card">
+                    <div class="pain-intensity">
+                        <span style="font-weight: 600;">Pain Intensity:</span>
+                        <div class="intensity-bar">
+                            <div class="intensity-fill" style="width: 85%;"></div>
+                        </div>
+                        <span style="color: #ef4444; font-weight: 600;">High</span>
+                    </div>
+                    <div class="card-title">Two-Factor Authentication UX Nightmare</div>
+                    <div class="card-excerpt">
+                        "The 2FA flow is absolutely broken on mobile. Users have to switch between 3 different apps just to log in, and half the time the SMS codes don't arrive. We're losing 40% of users at this step alone..."
+                    </div>
+                    <div class="card-tags">
+                        <span class="tag">Mobile UX</span>
+                        <span class="tag">Authentication</span>
+                        <span class="tag">User Retention</span>
+                        <span class="tag">SMS Issues</span>
+                    </div>
+                    <div class="card-meta">
+                        <span>👥 47 replies • 🔥 156 upvotes</span>
+                        <span>r/webdev • 2 days ago</span>
+                    </div>
+                </div>
+
+                <div class="pain-point-card">
+                    <div class="pain-intensity">
+                        <span style="font-weight: 600;">Pain Intensity:</span>
+                        <div class="intensity-bar">
+                            <div class="intensity-fill" style="width: 70%;"></div>
+                        </div>
+                        <span style="color: #f59e0b; font-weight: 600;">Medium</span>
+                    </div>
+                    <div class="card-title">Social Login Provider Reliability Issues</div>
+                    <div class="card-excerpt">
+                        "Google and Facebook auth keeps failing randomly. Users click 'Sign in with Google' and nothing happens, or they get cryptic error messages. The fallback email registration is too long and most people abandon..."
+                    </div>
+                    <div class="card-tags">
+                        <span class="tag">Social Auth</span>
+                        <span class="tag">Reliability</span>
+                        <span class="tag">User Experience</span>
+                        <span class="tag">Fallback Strategy</span>
+                    </div>
+                    <div class="card-meta">
+                        <span>👥 23 replies • 🔥 89 upvotes</span>
+                        <span>r/startups • 4 days ago</span>
+                    </div>
+                </div>
+
+                <div class="pain-point-card">
+                    <div class="pain-intensity">
+                        <span style="font-weight: 600;">Pain Intensity:</span>
+                        <div class="intensity-bar">
+                            <div class="intensity-fill" style="width: 90%;"></div>
+                        </div>
+                        <span style="color: #ef4444; font-weight: 600;">Critical</span>
+                    </div>
+                    <div class="card-title">Cross-Platform Authentication Sync Hell</div>
+                    <div class="card-excerpt">
+                        "Users log in on web, but mobile app doesn't recognize them. They have to re-authenticate on every device. The session management is completely broken across platforms, and customer support is flooded with login issues..."
+                    </div>
+                    <div class="card-tags">
+                        <span class="tag">Cross-Platform</span>
+                        <span class="tag">Session Management</span>
+                        <span class="tag">Support Tickets</span>
+                        <span class="tag">DevOps</span>
+                    </div>
+                    <div class="card-meta">
+                        <span>👥 64 replies • 🔥 203 upvotes</span>
+                        <span>r/programming • 1 day ago</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Insights -->
+        <div id="insights" class="mockup-screen">
+            <div class="header">
+                <h1>AI-Generated Insights</h1>
+                <p>Deep analysis of pain points and product opportunities</p>
+            </div>
+            <div class="results-section">
+                <div class="insights-panel">
+                    <div class="insights-title">🧠 Key Pain Point Analysis</div>
+                    
+                    <div class="insight-section">
+                        <h3>🔥 Primary Pain Points Identified</h3>
+                        <ul class="insight-list">
+                            <li>Two-factor authentication creates 40% user dropoff on mobile</li>
+                            <li>Cross-platform session sync failures cause support ticket floods</li>
+                            <li>Social login providers have 15-20% random failure rates</li>
+                            <li>SMS delivery delays create 5-10 minute authentication waits</li>
+                        </ul>
+                    </div>
+
+                    <div class="insight-section">
+                        <h3>🎯 Target User Segments</h3>
+                        <ul class="insight-list">
+                            <li>Mobile-first SaaS companies with 10K+ users</li>
+                            <li>E-commerce platforms with high cart abandonment</li>
+                            <li>B2B tools requiring secure multi-platform access</li>
+                            <li>Consumer apps with social login dependencies</li>
+                        </ul>
+                    </div>
+
+                    <div class="insight-section">
+                        <h3>💡 Product Opportunities</h3>
+                        <ul class="insight-list">
+                            <li>One-click mobile authentication without SMS dependency</li>
+                            <li>Cross-platform session management service</li>
+                            <li>Smart fallback authentication with progressive disclosure</li>
+                            <li>Real-time social login health monitoring dashboard</li>
+                        </ul>
+                    </div>
+
+                    <div class="insight-section">
+                        <h3>🌐 Cross-Domain Patterns</h3>
+                        <ul class="insight-list">
+                            <li>Authentication issues connect to customer support costs (87% correlation)</li>
+                            <li>Mobile UX problems cascade into user retention issues</li>
+                            <li>DevOps complexity increases with authentication reliability problems</li>
+                            <li>Documentation gaps worsen when authentication flows are complex</li>
+                        </ul>
+                    </div>
+
+                    <div class="insight-section">
+                        <h3>📊 Market Validation</h3>
+                        <ul class="insight-list">
+                            <li>47 validated discussions across 12 different communities</li>
+                            <li>Average pain intensity: 78% (High)</li>
+                            <li>Cross-referenced with 23 related domains</li>
+                            <li>15,000+ developers expressing similar frustrations</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboard" class="mockup-screen">
+            <div class="header">
+                <h1>Pain Point Dashboard</h1>
+                <p>Track trends and discover emerging opportunities</p>
+            </div>
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h3>📈 Trending Pain Points</h3>
+                    <div style="margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <span>AI Integration Complexity</span>
+                            <span style="color: #ef4444;">↑ 45%</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <span>Cloud Cost Management</span>
+                            <span style="color: #ef4444;">↑ 32%</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <span>Mobile Auth UX</span>
+                            <span style="color: #ef4444;">↑ 28%</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <span>API Rate Limiting</span>
+                            <span style="color: #10b981;">↓ 12%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h3>🎯 Top Opportunities</h3>
+                    <div style="margin-bottom: 15px;">
+                        <div style="padding: 10px; background: #f3f4f6; border-radius: 8px; margin-bottom: 10px;">
+                            <div style="font-weight: 600; margin-bottom: 5px;">Cross-Platform Auth</div>
+                            <div style="font-size: 14px; color: #6b7280;">234 pain points • 15K affected users</div>
+                        </div>
+                        <div style="padding: 10px; background: #f3f4f6; border-radius: 8px; margin-bottom: 10px;">
+                            <div style="font-weight: 600; margin-bottom: 5px;">AI Model Deployment</div>
+                            <div style="font-size: 14px; color: #6b7280;">189 pain points • 12K affected users</div>
+                        </div>
+                        <div style="padding: 10px; background: #f3f4f6; border-radius: 8px;">
+                            <div style="font-weight: 600; margin-bottom: 5px;">Documentation Search</div>
+                            <div style="font-size: 14px; color: #6b7280;">156 pain points • 8K affected users</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h3>📊 Domain Distribution</h3>
+                    <div class="trend-chart">
+                        Pain Point Distribution Chart
+                        <br><small>(DevOps: 28%, UX: 22%, API: 18%, Auth: 15%, Other: 17%)</small>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h3>⚡ Recent Discoveries</h3>
+                    <div style="margin-bottom: 15px;">
+                        <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #e5e7eb;">
+                            <div style="font-weight: 600; margin-bottom: 5px;">Webhook Reliability Crisis</div>
+                            <div style="font-size: 14px; color: #6b7280;">Discovered 2 hours ago • 89% pain intensity</div>
+                        </div>
+                        <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #e5e7eb;">
+                            <div style="font-weight: 600; margin-bottom: 5px;">Mobile App Store Review Pain</div>
+                            <div style="font-size: 14px; color: #6b7280;">Discovered 6 hours ago • 76% pain intensity</div>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600; margin-bottom: 5px;">GraphQL Error Handling</div>
+                            <div style="font-size: 14px; color: #6b7280;">Discovered 12 hours ago • 82% pain intensity</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
